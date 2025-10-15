@@ -1,0 +1,17 @@
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.14.0
+    hooks:
+      # Run linter with auto-fix
+      - id: ruff-check
+        args: [--fix]
+      # Run formatter
+      - id: ruff-format
+
+  - repo: https://github.com/facebook/pyrefly-pre-commit
+    rev: 0.0.1
+    hooks:
+      - id: pyrefly-typecheck-specific-version
+        name: Pyrefly
+        pass_filenames: false
+        additional_dependencies: ['pyrefly==0.1.0']

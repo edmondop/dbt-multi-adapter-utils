@@ -1,0 +1,11 @@
+adapters:
+  - postgres
+  - snowflake
+  - bigquery
+
+macro_output: macros/portable_functions.sql
+
+scan_project: true
+
+model_paths:
+  - models

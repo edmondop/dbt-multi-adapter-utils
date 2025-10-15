@@ -1,0 +1,106 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    name: Test Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v5
+      with:
+        enable-cache: true
+
+    - name: Set up Python ${{ matrix.python-version }}
+      run: uv python install ${{ matrix.python-version }}
+
+    - name: Install dependencies
+      run: uv sync --extra dev
+
+    - name: Lint with ruff
+      run: uv run ruff check src/ tests/ integration_tests/
+
+    - name: Format check with ruff
+      run: uv run ruff format --check src/ tests/ integration_tests/
+
+    - name: Type check with pyrefly
+      run: uv run pyrefly check src/
+
+    - name: Run unit tests
+      run: uv run pytest tests/ -v --cov=src/dbt_multi_adapter_utils --cov-report=xml --cov-report=term
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v4
+      with:
+        file: ./coverage.xml
+        fail_ci_if_error: false
+      if: matrix.python-version == '3.12'
+
+  integration:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v5
+      with:
+        enable-cache: true
+
+    - name: Set up Python 3.12
+      run: uv python install 3.12
+
+    - name: Install dependencies
+      run: uv sync --extra dev
+
+    - name: Run integration tests
+      run: uv run pytest tests/test_workflow.py -v --no-cov
+
+    - name: Test example project scan
+      run: uv run dbt-multi-adapter-utils scan --config example_project/.dbt-multi-adapter.yml
+
+    - name: Test example project generate
+      run: uv run dbt-multi-adapter-utils generate --config example_project/.dbt-multi-adapter.yml
+
+    - name: Verify generated macros exist
+      run: test -f example_project/macros/portable_functions.sql
+
+  integration-dbt:
+    name: dbt Integration Tests (Spark + DuckDB)
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v5
+      with:
+        enable-cache: true
+
+    - name: Set up Python 3.12
+      run: uv python install 3.12
+
+    - name: Install dependencies
+      run: uv sync --extra dev
+
+    - name: Run dbt integration tests (fast - DuckDB only)
+      run: uv run pytest integration_tests/test_integration_dbt.py -v -m "not slow" --no-cov
+
+  all-checks:
+    name: All Checks Passed
+    needs: [test, integration, integration-dbt]
+    runs-on: ubuntu-latest
+    steps:
+    - name: Success
+      run: echo "All checks passed!"

@@ -1,0 +1,111 @@
+[project]
+name = "dbt-multi-adapter-utils"
+version = "0.1.0"
+description = "CLI tool to generate cross-database compatible dbt macros using SQLGlot"
+authors = [
+    {name = "Edmondo", email = "edmondo@example.com"}
+]
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+keywords = ["dbt", "sql", "cross-database", "sqlglot", "data-engineering"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Topic :: Database",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+dependencies = [
+    "sqlglot>=25.0.0",
+    "typer>=0.12.0",
+    "pyyaml>=6.0.0",
+    "rich>=13.0.0",
+    "jinja2>=3.1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-cov>=4.1.0",
+    "ruff>=0.6.0",
+    "pyrefly>=0.1.0",
+]
+
+[project.scripts]
+dbt-multi-adapter-utils = "dbt_multi_adapter_utils.cli:app"
+
+[project.urls]
+Homepage = "https://github.com/yourusername/dbt-multi-adapter-utils"
+Repository = "https://github.com/yourusername/dbt-multi-adapter-utils"
+Issues = "https://github.com/yourusername/dbt-multi-adapter-utils/issues"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/dbt_multi_adapter_utils"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "N",   # pep8-naming
+    "UP",  # pyupgrade
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "SIM", # flake8-simplify
+]
+ignore = [
+    "B008",  # Typer uses function calls in defaults
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_functions = "test_*"
+addopts = "--cov=src/dbt_multi_adapter_utils --cov-report=term-missing --cov-report=html"
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+]
+# Exclude integration tests from default test run
+norecursedirs = ["integration_tests"]
+
+[tool.coverage.run]
+source = ["src/dbt_multi_adapter_utils"]
+omit = ["tests/*", "integration_tests/*"]
+
+[tool.coverage.report]
+fail_under = 80
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-cov>=4.1.0",
+    "ruff>=0.6.0",
+    "pyrefly>=0.1.0",
+    "dbt-core>=1.10.13",
+    "dbt-duckdb>=1.9.6",
+    "dbt-spark[PyHive]>=1.9.3",
+    "testcontainers>=4.13.2",
+    "pre-commit>=4.3.0",
+]

@@ -1,0 +1,10 @@
+product_id,product_name,category,tag_name,tag_category
+prod_a,Widget A,widgets,bestseller,sales
+prod_a,Widget A,widgets,new-arrival,status
+prod_a,Widget A,widgets,electronics,type
+prod_b,Widget B,widgets,featured,sales
+prod_b,Widget B,widgets,electronics,type
+prod_b,Widget B,widgets,premium,quality
+prod_c,Widget C,widgets,budget-friendly,price
+prod_c,Widget C,widgets,electronics,type
+prod_c,Widget C,widgets,popular,sales

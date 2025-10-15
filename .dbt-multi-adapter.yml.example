@@ -1,0 +1,38 @@
+# Configuration for dbt-multi-adapter-utils
+# Copy this file to .dbt-multi-adapter.yml and customize for your project
+
+# List of target adapters (minimum 2 required)
+adapters:
+  - postgres
+  - snowflake
+  - bigquery
+
+# Output path for generated macros (relative to this config file)
+macro_output: macros/portable_functions.sql
+
+# Whether to scan the project for non-portable functions
+scan_project: true
+
+# Paths to scan/rewrite (relative to this config file)
+# If not specified, defaults to ["models"]
+model_paths:
+  - models/staging
+  - models/marts
+  - models/intermediate
+
+# Example configurations for different adapter combinations:
+
+# PostgreSQL + Snowflake
+# adapters:
+#   - postgres
+#   - snowflake
+
+# Snowflake + Databricks
+# adapters:
+#   - snowflake
+#   - databricks
+
+# BigQuery + Spark
+# adapters:
+#   - bigquery
+#   - spark

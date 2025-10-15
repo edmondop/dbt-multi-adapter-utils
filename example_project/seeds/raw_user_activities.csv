@@ -1,0 +1,14 @@
+user_id,session_id,activity_date,page_url,action_type
+1,session_001,2024-10-01,/home,view
+1,session_001,2024-10-01,/products,view
+1,session_001,2024-10-01,/products/widget-a,click
+2,session_002,2024-10-02,/home,view
+2,session_002,2024-10-02,/cart,view
+2,session_002,2024-10-02,/checkout,submit
+3,session_003,2024-10-03,/products,view
+3,session_003,2024-10-03,/products/widget-b,click
+3,session_003,2024-10-03,/products/widget-b,view
+1,session_004,2024-10-05,/home,view
+1,session_004,2024-10-05,/products/widget-a,view
+2,session_005,2024-10-06,/products,view
+2,session_005,2024-10-06,/cart,view

@@ -1,0 +1,17 @@
+name: example_ecommerce
+version: '1.0.0'
+config-version: 2
+
+profile: example
+
+model-paths: ["models"]
+macro-paths: ["macros"]
+seed-paths: ["seeds"]
+
+models:
+  example_ecommerce:
+    +materialized: table
+
+seeds:
+  example_ecommerce:
+    +schema: main

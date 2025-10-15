@@ -1,0 +1,15 @@
+# Configuration for dbt-multi-adapter-utils
+# This example shows migrating from Spark with support for DuckDB, Postgres, and Snowflake
+
+adapters:
+  - spark
+  - duckdb
+  - postgres
+  - snowflake
+
+macro_output: macros/portable_functions.sql
+
+scan_project: true
+
+model_paths:
+  - models

@@ -1,0 +1,9 @@
+order_id,customer_id,order_date,product_id,product_name,quantity,line_total
+order_001,1,2024-10-01,prod_a,Widget A,2,39.98
+order_001,1,2024-10-01,prod_b,Widget B,1,24.99
+order_002,2,2024-10-02,prod_a,Widget A,1,19.99
+order_002,2,2024-10-02,prod_c,Widget C,3,89.97
+order_003,3,2024-10-03,prod_b,Widget B,2,49.98
+order_004,1,2024-10-05,prod_c,Widget C,1,29.99
+order_005,2,2024-10-06,prod_a,Widget A,4,79.96
+order_005,2,2024-10-06,prod_b,Widget B,2,49.98

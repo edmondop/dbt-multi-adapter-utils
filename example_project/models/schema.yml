@@ -1,0 +1,95 @@
+version: 2
+
+models:
+  - name: user_activity_summary
+    description: Aggregates user activities by month
+    columns:
+      - name: user_id
+        description: Unique user identifier
+      - name: activity_month
+        description: Month of activity
+      - name: total_sessions
+        description: Count of distinct sessions
+      - name: visited_pages
+        description: List of distinct pages visited
+      - name: all_actions
+        description: List of all actions taken
+
+  - name: order_items_rollup
+    description: Rolls up order line items by order
+    columns:
+      - name: order_id
+        description: Unique order identifier
+      - name: product_ids
+        description: List of product IDs in order
+      - name: product_names
+        description: List of product names
+      - name: order_total
+        description: Total order amount
+
+  - name: product_tags
+    description: Aggregates product tags
+    columns:
+      - name: product_id
+        description: Unique product identifier
+      - name: all_tags
+        description: List of all tag names
+      - name: tag_categories
+        description: Set of unique tag categories
+
+unit_tests:
+  - name: test_order_items_rollup_aggregates_correctly
+    model: order_items_rollup
+    description: Verifies that order items are correctly aggregated
+    given:
+      - input: ref('raw_order_items')
+        format: dict
+        rows:
+          - order_id: order_001
+            customer_id: 1
+            order_date: '2024-10-01'
+            product_id: prod_a
+            product_name: Widget A
+            quantity: 2
+            line_total: 39.98
+          - order_id: order_001
+            customer_id: 1
+            order_date: '2024-10-01'
+            product_id: prod_b
+            product_name: Widget B
+            quantity: 1
+            line_total: 24.99
+    expect:
+      format: dict
+      rows:
+        - order_id: order_001
+          product_ids: ['prod_a', 'prod_b']
+          product_names: ['Widget A', 'Widget B']
+          total_items: 3
+
+  - name: test_product_tags_aggregates_tags
+    model: product_tags
+    description: Verifies tag aggregation works correctly
+    given:
+      - input: ref('raw_product_tags')
+        format: dict
+        rows:
+          - product_id: prod_a
+            product_name: Widget A
+            category: widgets
+            tag_name: bestseller
+            tag_category: sales
+          - product_id: prod_a
+            product_name: Widget A
+            category: widgets
+            tag_name: new-arrival
+            tag_category: status
+    expect:
+      format: dict
+      rows:
+        - product_id: prod_a
+          product_name: Widget A
+          category: widgets
+          all_tags: ['bestseller', 'new-arrival']
+          # tag_categories is a SET - order doesn't matter, so we exclude from comparison
+          tag_count: 2

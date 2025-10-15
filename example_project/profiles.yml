@@ -1,0 +1,29 @@
+# dbt profiles for example_project integration tests
+# Use with: dbt run --profiles-dir . --target spark
+
+example:
+  outputs:
+    spark:
+      type: spark
+      method: thrift
+      host: localhost
+      port: 10000
+      schema: default
+      threads: 2
+      connect_timeout: 60
+      connect_retries: 3
+
+    duckdb:
+      type: duckdb
+      path: target/example.duckdb
+      schema: main
+      threads: 2
+
+    # Unit tests can run on DuckDB (fast, local)
+    unittest:
+      type: duckdb
+      path: target/unittest.duckdb
+      schema: main
+      threads: 2
+
+  target: duckdb
