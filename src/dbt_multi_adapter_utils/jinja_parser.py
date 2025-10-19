@@ -71,7 +71,7 @@ def _lex_template(template_text: str) -> list[Token] | None:
     try:
         lexer = get_lexer(env)
         stream = lexer.tokenize(template_text)
-        return [token for token in stream]
+        return list(stream)
     except Exception:
         return None
 

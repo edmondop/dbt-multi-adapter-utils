@@ -184,9 +184,7 @@ def _process_single_region(
     modified_region = _apply_replacements_to_region(original_region_sql, functions_to_rewrite)
 
     if modified_region != original_region_sql:
-        modified_content = (
-            modified_content[:adjusted_start] + modified_region + modified_content[adjusted_end:]
-        )
+        modified_content = modified_content[:adjusted_start] + modified_region + modified_content[adjusted_end:]
         offset += len(modified_region) - len(original_region_sql)
 
     return modified_content, offset
