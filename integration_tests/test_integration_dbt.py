@@ -44,9 +44,7 @@ def spark_container():
         port = container.get_exposed_port(10000)
 
         if not wait_for_spark_thrift(host, port, timeout=90):
-            raise RuntimeError(
-                f"Spark Thrift server did not start within 90 seconds at {host}:{port}"
-            )
+            raise RuntimeError(f"Spark Thrift server did not start within 90 seconds at {host}:{port}")
 
         # Additional wait for Thrift server to fully initialize
         # Socket connection != database ready - give it more time

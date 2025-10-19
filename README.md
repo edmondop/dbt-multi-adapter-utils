@@ -196,12 +196,14 @@ The tool uses [SQLGlot](https://github.com/tobymao/sqlglot) to parse SQL and det
 
 #### 2. Jinja Template Handling
 
-dbt models mix Jinja2 templates with SQL. Rather than using Jinja2's built-in parser (which would require loading dbt context and risk executing code), the tool uses regex patterns to classify regions:
+dbt models mix Jinja2 templates with SQL. The tool uses Jinja2's native lexer to tokenize templates without executing any code or loading dbt context. This token-based approach classifies template regions:
 
 1. STATIC - Pure SQL: `SELECT * FROM users`
 2. SAFE_EXPRESSION - dbt helpers: `{{ ref('users') }}`, `{{ var('x') }}`
 3. CONTROL_FLOW - Logic: `{% if %}`, `{% for %}`
 4. UNSAFE - Complex expressions: `{{ custom_macro() }}`
+
+The lexer handles all edge cases correctly, including nested function calls like `{{ ref(var('table_name')) }}` and strings containing Jinja delimiters.
 
 The tool can handle control flow by masking it as a placeholder during SQL parsing:
 

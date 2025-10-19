@@ -42,8 +42,6 @@ def scan_project(config: Config) -> dict[str, int]:
 
     known_differences = set(get_function_differences(config.adapters))
 
-    non_portable = {
-        func: count for func, count in all_functions.items() if func in known_differences
-    }
+    non_portable = {func: count for func, count in all_functions.items() if func in known_differences}
 
     return dict(non_portable)
